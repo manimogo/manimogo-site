@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Manimogo</title>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <main class="site">
+    <!-- ENTER SCREEN -->
+    <section class="enter-screen" id="enterScreen">
+      <button class="enter-button" id="enterButton" type="button">enter ^_^</button>
+    </section>
+
+    <!-- SUBTLE INTRO FLASH TEXT -->
+    <div class="enter-flash" id="enterFlash">yeah baby!</div>
+
+    <!-- QUADRANTS -->
+    <section class="quadrants" aria-hidden="false">
+      <!-- TOP LEFT -->
+      <div class="quadrant q1">
+        <div class="quad-content main-title">
+          <h1>Manimogo</h1>
+        </div>
+      </div>
+
+      <!-- TOP RIGHT -->
+      <div class="quadrant q2">
+        <div class="quad-content">
+          <a class="section-link" href="#upcoming-dates">Upcoming Dates</a>
+
+          <!-- UPDATE SHOW LINKS HERE -->
+          <div class="date-list" id="upcoming-dates">
+            <a class="date-link" href="https://example.com/show-1" target="_blank" rel="noopener noreferrer">
+              07.04.26 - NYC - Le Petit Box
+            </a>
+
+            <a class="date-link" href="https://example.com/show-2" target="_blank" rel="noopener noreferrer">
+              07.15.26 — NYC - Circadian rhythms
+            </a>
+
+            <a class="date-link" href="https://example.com/show-3" target="_blank" rel="noopener noreferrer">
+              08.10.26 — SF - ????
+            </a>
+          </div>
+          <!-- END UPDATE SHOW LINKS -->
+        </div>
+      </div>
+
+      <!-- BOTTOM RIGHT -->
+      <div class="quadrant q4"></div>
+
+      <!-- BOTTOM LEFT -->
+      <div class="quadrant q3">
+        <div class="quad-content social-links">
+          <a class="social-link" href="https://www.instagram.com/manimogo.1" target="_blank" rel="noopener noreferrer">
+            Instagram
+          </a>
+
+          <a class="social-link" href="https://soundcloud.com/manimogo" target="_blank" rel="noopener noreferrer">
+            SoundCloud
+          </a>
+
+          <a class="social-link" href="https://manimogo.bandcamp.com" target="_blank" rel="noopener noreferrer">
+            Bandcamp
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- QUADRANT AUDIO FILES -->
+  <audio id="tone1" src="audio/bip4.wav" preload="auto"></audio>
+  <audio id="tone2" src="audio/bip3.wav" preload="auto"></audio>
+  <audio id="tone3" src="audio/bip2.wav" preload="auto"></audio>
+  <audio id="tone4" src="audio/bip3.wav" preload="auto"></audio>
+
+  <script>
+    const enterScreen = document.getElementById("enterScreen");
+    const enterButton = document.getElementById("enterButton");
+    const enterFlash = document.getElementById("enterFlash");
+
+    const quadrants = [
+      document.querySelector(".q1"),
+      document.querySelector(".q2"),
+      document.querySelector(".q4"),
+      document.querySelector(".q3")
+    ];
+
+    const quadContents = document.querySelectorAll(".quad-content");
+
+    const tones = [
+      document.getElementById("tone1"),
+      document.getElementById("tone2"),
+      document.getElementById("tone3"),
+      document.getElementById("tone4")
+    ];
+
+    // AUDIO VOLUME
+    // 0.1 = very quiet
+    // 0.25 = soft
+    // 0.5 = half volume
+    // 1 = full volume
+    tones.forEach((tone) => {
+      if (tone) {
+        tone.volume = 0.05;
+      }
+    });
+
+    let introStarted = false;
+
+    function playTone(index) {
+      const tone = tones[index];
+
+      if (!tone) return;
+
+      tone.currentTime = 0;
+
+      const playPromise = tone.play();
+
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          console.log("Audio playback was blocked or unavailable.");
+        });
+      }
+    }
+
+    function revealContent() {
+      document.body.classList.add("loaded");
+
+      quadContents.forEach((item) => {
+        item.classList.add("visible");
+      });
+    }
+
+    function startIntro() {
+      if (introStarted) return;
+
+      introStarted = true;
+
+      enterScreen.classList.add("hidden");
+
+      enterFlash.classList.remove("visible");
+      void enterFlash.offsetWidth;
+      enterFlash.classList.add("visible");
+
+      const initialWhitePause = 500;
+      const stepDuration = 500;
+
+      setTimeout(() => {
+        quadrants.forEach((quadrant, index) => {
+          setTimeout(() => {
+            quadrant.classList.add("visible");
+            playTone(index);
+
+            if (index === quadrants.length - 1) {
+              setTimeout(() => {
+                revealContent();
+              }, stepDuration);
+            }
+          }, index * stepDuration);
+        });
+      }, initialWhitePause);
+    }
+
+    enterButton.addEventListener("click", startIntro);
+  </script>
+</body>
+</html>
