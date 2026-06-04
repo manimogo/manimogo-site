@@ -152,19 +152,19 @@ body.loaded {
 }
 
 .q2 {
-  background: #ffa6a6;
+  background: #ffe0e0;
   align-items: flex-start;
   justify-content: flex-start;
 }
 
 .q3 {
-  background: #b8ff85;
+  background: #edffe0;
   align-items: flex-end;
   justify-content: flex-start;
 }
 
 .q4 {
-  background: #a6f1ff;
+  background: #c2f3fc;
 }
 
 /* CONTENT FADE-IN */
